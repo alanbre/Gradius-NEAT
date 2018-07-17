@@ -24,12 +24,12 @@ CONTROL = True
 
 max_frame = 0
 isInitialized = 0
-rom_path = '/home/alan/Aula/TCC/rom/gradius.nes'
-lua_path = '/home/alan/Aula/TCC/gradius.lua'
+rom_path = 'CAMINHO PARA O ARQUIVO .NES DO GRADIUS EX. /HOME/NOME/PASTA/ROM/Gradius.nes'
+lua_path = 'CAMINHO PARA O ARQUIVO .LUA EX. /HOME/NOME/PASTA/gradius.lua'
 cmd_args = ['--xscale 2', '--yscale 2', '-f 0']
 pipe_out = None
-path_pipe_out = '/home/alan/Aula/TCC/pipeout'
-path_pipe_in = '/home/alan/Aula/TCC/pipein'
+path_pipe_out = 'CAMINHO PARA ONDE O PIPEOUT SERÁ CRIADO /HOME/NOME/PASTA/pipeout'
+path_pipe_in = 'CAMINHO PARA ONDE O PIPEIN SERÁ CRIADO /HOME/NOME/PASTA/pipein'
 subprocessx = None
 commands     = {}
 python_frame = 1
@@ -67,7 +67,6 @@ def create_pipes():
 
 def write_pipe(value):
     global pipe_out
-    #print("Python enviou: " + value)
     try:
         if pipe_out is None:
             pipe_out = open(path_pipe_out, 'w', 1)
@@ -203,7 +202,6 @@ def run(genome, config):
     while True:
         if python_frame > max_frame:
             max_frame = python_frame        
-        #print("alive: " + str(alive) + ", frame:" + str(python_frame))
         commandstring = ""
         if (alive != 2):
             if((python_frame % 2) == 0):
@@ -214,13 +212,11 @@ def run(genome, config):
                     commandstring = commandstring + setCommands(commands)
                 else:                    
                     input_ = [python_frame]
-                    #input_ = [vicx + python_frame, vicy]
                     input_.extend([vicx, vicy])
                     j = len(enemies)
                     k = 0
                     while (k < j) and (k < 10):
                         enemy = enemies[k]
-                        #enemy[0] = enemy[0] + python_frame 
                         input_.extend(enemy)
                         fitness = python_frame
                         if(enemy[0] == 2):
@@ -235,7 +231,6 @@ def run(genome, config):
                         l = [-1, -1, -1, -1]
                         input_.extend(l)
                         k += 1
-                    #fitness = SCORE + python_frame
                     output = net.activate(input_)
                     for i, o in enumerate(output):
                         if o < 0.5:
@@ -263,7 +258,6 @@ def run(genome, config):
         fullstring = str(python_frame) + commandstring
         if(commandstring == "#re" and CONTROL):
             CONTROL = False
-            #print(fitness)
             return (fitness + calcfit)
         sendCommand(fullstring)
         reciveFeedback()
@@ -288,7 +282,7 @@ fitness = 0
 best_fitness = 0
 
 for i in range(range_):
-    pop = neat.Checkpointer.restore_checkpoint('neat-checkpoint-15.gz')
+    pop = neat.Population(config)
 
     stats = neat.StatisticsReporter()
     pop.add_reporter(stats)
